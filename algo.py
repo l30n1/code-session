@@ -60,7 +60,38 @@ class Itinerary:
                         steps += 1
                         return steps
             return steps
-    
+
+
+
+    def shortestPath(self, point_start, point_stop, distance = 0, shotest_distance = None):    
+        # existe = False
+        # for i in range(len(self.routes)):
+        #     route = self.routes[i]
+        #     if (route.town_end.name == point_stop):
+        #         existe = True
+        #         break            
+
+
+        if (shotest_distance != None and distance < shotest_distance):
+            return
+        else: 
+            for i in range(len(self.routes)):
+                route = self.routes[i]
+                distance += route.size
+
+                if (route.town_start.name == point_start and route.town_end.name != point_stop):
+                    shotest_distance = self.shortestPath(route.town_end.name, point_stop, distance, shotest_distance)
+                elif (route.town_start.name == point_start and route.town_end.name == point_stop):
+                    if (shotest_distance == None):
+                        shotest_distance = route.size
+                    elif (distance < shotest_distance):
+                        shotest_distance = distance
+
+                    return shotest_distance
+            return shotest_distance
+
+
+
     def getDistanceMaxSteps(self, point_start, point_stop, max_distance, steps=0, distance=0):
         if (distance > max_distance):
             return steps
@@ -132,7 +163,9 @@ print('06' ,end=' # ')
 print(itinerary.routesQuantity('C', 'C', 3))
 print('07', end=' # ')
 print(itinerary.routesQuantity('A', 'C', 4, 0, True))
-
-
+print('08', end=' # ')
+print(itinerary.shortestPath('A', 'C'))
+print('09', end=' # ')
+print(itinerary.shortestPath('B', 'B'))
 print(10, end=' # ')
 print(itinerary.getDistanceMaxSteps('C', 'C', 30))
