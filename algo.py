@@ -1,5 +1,7 @@
 
 class Route:
+
+    destinos = []
     
     size = 0
     town_start = None
@@ -42,6 +44,45 @@ class Itinerary:
                     else:
                         return route.size + counter
             return -1
+    
+    def routesQuantity(self, point_start, point_stop, max_steps, steps = 0, exactly = False):
+        if (max_steps < 0):
+            return 0
+        else:
+            for i in range(len(self.routes)):
+                route = self.routes[i]
+                print(f'{point_start}{i} - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
+                if (route.town_start.name == point_start and route.town_end.name != point_stop):
+                    print(f'Into - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
+                    steps = self.routesQuantity(route.town_end.name, point_stop, max_steps - 1, steps)                                        
+                elif (route.town_start.name == point_start and route.town_end.name == point_stop):
+                    if (not exactly and max_steps == 0):
+                        return 0
+                    elif ((exactly and max_steps == 0) or not exactly):
+                        steps += 1
+                        print(f'Steps: : {steps}')
+                        print(f'Encontrei - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
+                        # return steps
+            return steps
+                
+
+                    
+                
+
+                
+'''
+Comentários
+
+entrar C
+entrar em todos os roteiro de C até max_steps
+verificar se o nó de destino é igual a c
+
+C => C
+
+
+
+'''
+        
 
 a = TrainStation("A")
 b = TrainStation("B")
@@ -53,7 +94,7 @@ itinerary = Itinerary()
 itinerary.addRoute(Route(a, b, 5))
 itinerary.addRoute(Route(b, c, 4))
 itinerary.addRoute(Route(c, d, 8))
-itinerary.addRoute(Route(d, c, 8))
+itinerary.addRoute(Route(d, c, 8))  
 itinerary.addRoute(Route(d, e, 6))
 itinerary.addRoute(Route(a, d, 5))
 itinerary.addRoute(Route(c, e, 2))
@@ -73,3 +114,13 @@ for i, route in enumerate(routes):
         print('NO SUCH ROUTE')
     else: 
         print(f'{i + 1} # {distance}')
+
+'''
+print('Teste ---- C para C ')
+print(itinerary.routesQuantity('C', 'C', 3))
+
+print('\n\nTeste ---- A para C ')
+print(itinerary.routesQuantity('A', 'C', 4, 0, True))
+'''
+print('\n\nTeste ---- C para C ')
+print(itinerary.routesQuantity('C', 'C', 30))
