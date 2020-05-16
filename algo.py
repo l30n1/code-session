@@ -51,20 +51,32 @@ class Itinerary:
         else:
             for i in range(len(self.routes)):
                 route = self.routes[i]
-                print(f'{point_start}{i} - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
                 if (route.town_start.name == point_start and route.town_end.name != point_stop):
-                    print(f'Into - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
                     steps = self.routesQuantity(route.town_end.name, point_stop, max_steps - 1, steps)                                        
                 elif (route.town_start.name == point_start and route.town_end.name == point_stop):
                     if (not exactly and max_steps == 0):
                         return 0
                     elif ((exactly and max_steps == 0) or not exactly):
                         steps += 1
-                        print(f'Steps: : {steps}')
-                        print(f'Encontrei - Origem: {route.town_start.name} | Destino: {route.town_end.name}')
-                        # return steps
+                        return steps
             return steps
-                
+    
+    def getDistanceMaxSteps(self, point_start, point_stop, max_distance, steps=0, distance=0):
+        if (distance > max_distance):
+            return steps
+        else:
+            for i in range(len(self.routes)):
+                route = self.routes[i]
+
+                if (route.town_start.name == point_start):
+                    if (route.town_end.name == point_stop):
+                        steps += 1
+
+                    distance += route.size
+                    steps = self.getDistanceMaxSteps(
+                        route.town_end.name, point_stop, max_distance, steps, distance)
+            return steps
+
 
                     
                 
@@ -111,16 +123,16 @@ routes = [
 for i, route in enumerate(routes):
     distance = itinerary.getDistance(route)
     if (distance == 0):
-        print('NO SUCH ROUTE')
+        print(f'{i:02} - NO SUCH ROUTE')
     else: 
-        print(f'{i + 1} # {distance}')
+        print(f'{i + 1:02} # {distance}')
 
-'''
-print('Teste ---- C para C ')
+
+print('06' ,end=' # ')
 print(itinerary.routesQuantity('C', 'C', 3))
-
-print('\n\nTeste ---- A para C ')
+print('07', end=' # ')
 print(itinerary.routesQuantity('A', 'C', 4, 0, True))
-'''
-print('\n\nTeste ---- C para C ')
-print(itinerary.routesQuantity('C', 'C', 30))
+
+
+print(10, end=' # ')
+print(itinerary.getDistanceMaxSteps('C', 'C', 30))
